@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .settings-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+        }
+        .blank-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .option {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .option:hover {
+            background-color: #eaf3ff; /* Light blue on hover */
+            transform: translateY(-5px) scale(1.02);
+        }
+        .form-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .form-field {
+            margin-bottom: 15px;
+        }
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-field input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .country-code-container {
+            display: flex;
+            align-items: center;
+        }
+        .country-code-dropdown {
+            width: auto;
+            margin-right: 10px;
+        }
+        .suggestions {
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            max-height: 150px; 
+            overflow-y: auto; 
+            display: none; 
+            position: absolute; 
+            background-color: white; 
+            z-index: 1000; 
+        }
+        .suggestion-item {
+            padding: 10px; 
+            cursor: pointer; 
+        }
+        .suggestion-item:hover { 
+           background-color: #eaf3ff; 
+       }
+       .save-button { 
+           padding: 10px 15px; 
+           background-color: #007bff; /* Blue button */
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           cursor:pointer; 
+       } 
+       .save-button:hover { 
+           background-color:#0056b3; /* Darker blue on hover */
+       } 
+
+       /* Back Button Styles */
+       .back-button { 
+           padding: 10px; 
+           background-color: #007bff; /* Blue background */
+           color:white; /* White text */
+           border:none; 
+           border-radius :5 px; 
+           cursor:pointer; 
+           margin-bottom :20 px; 
+           transition: background-color 0.3s ease, transform 0.3s ease; /* Animation effects */
+       }  
+       .back-button:hover { 
+           background-color:#0056b3; /* Darker blue on hover */
+           transform: scale(1.05); /* Slightly enlarge on hover */
+       }  
+
+       /* Styles for Checkout Section */
+       .checkout-section { 
+           padding :20 px;  
+           background-color :#fff;  
+           border-radius :8 px;  
+           box-shadow :0 4 px 10 px rgba(0,0,0,0.2);  
+           margin-top :20 px;  
+           transition :transform 0.3 s ease;  
+       } 
+
+       .checkout-section:hover {  
+           transform :translateY(-5 px);  
+           box-shadow :0 8 px 15 px rgba(0,0,0,0.3);  
+       } 
+
+       /* Custom Checkout Button */
+       .custom-checkout-button {  
+           padding :10 px;  
+           background-color:#28a745;  
+           color:white;  
+           border-radius :5 px;  
+           border:none;  
+           cursor:pointer;  
+           margin-left :10 px;  
+       }  
+
+       .custom-checkout-button:hover {  
+           background-color:#218838;  
+       } 
+
+       /* Styles for Domain Management Section */
+       .domain-management-section {
+           display:none; /* Initially hidden */
+           margin-top: 20px;
+           padding: 20px;
+           background-color: #fff;
+           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+       }
+
+       /* Container for Domain Options */
+       .domain-options-container {
+           display: flex; /* Use flexbox for horizontal layout */
+           justify-content: space-around; /* Space out the options */
+           margin-top: 20px; /* Add some spacing above */
+       }
+
+       /* Buttons for Domain Management Options */
+       .domain-option {
+           padding: 15px;
+           background-color: #007bff; /* Light blue button */
+           color: white;
+           border-radius: 5px;
+           cursor:pointer; 
+           text-align:center; /* Center text */
+           transition: background-color 0.3s ease, transform 0.3s ease; /* Animation effects */
+       }
+
+       .domain-option:hover {
+          background-color:#0056b3; /* Darker blue on hover */
+          transform: translateY(-5px); /* Lift effect on hover */
+      }
+
+    </style>
+</head>
+<body>
+    <div class="settings-title">Settings</div>
+    <div class="blank-section">
+        <div class="option" onclick="showForm()">Personal Details</div>
+        <div class="option" onclick="showCheckout()">Checkout</div>
+        <div class="option" onclick="showDomainManagement()">Domain Management</div> <!-- New Domain Management Option -->
+    </div>
+
+    <!-- Personal Details Form Section -->
+    <div class="form-section" id="formSection">
+        <button class="back-button" onclick="goBack()"><i class="fas fa-arrow-left"></i></button> <!-- Back Button -->
+        
+        <h2>Enter Your Details</h2>
+        
+        <div class="form-field">
+          <label for="storeName">Store Name:</label>
+          <input type="text" id="storeName" placeholder="Enter your store name">
+      </div>
+
+      <div class="form-field">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="Enter your email">
+      </div>
+
+      <div class="form-field">
+          <label for="phone">Phone Number:</label>
+          <div class="country-code-container">
+              <select id="countryCode" class="country-code-dropdown">
+                  <option value="+1">+1 (USA)</option>
+                  <option value="+91">+91 (India)</option>
+                  <option value="+44">+44 (UK)</option>
+                  <option value="+61">+61 (Australia)</option>
+                  <option value="+49">+49 (Germany)</option>
+                  <option value="+33">+33 (France)</option> <!-- More country codes can be added -->
+              </select>
+              <input type="tel" id="phone" placeholder="Enter your phone number" oninput="formatPhone()">
+          </div>
+      </div>
+
+      <div class="form-field">
+          <label for="storeLink">Store Link:</label>
+          <input type="url" id="storeLink" placeholder="Enter your store link">
+      </div>
+
+      <div class="form-field">
+          <label for="country">Country:</label>
+          <input type="text" id="country" placeholder="Enter your country" oninput="showSuggestions(this.value)">
+          <!-- Suggestions Box -->
+          <div id="suggestions" class="suggestions"></div> <!-- Placeholder to show selected country -->
+          <small id="selectedCountry"></small> <!-- Display selected country -->
+      </div>
+
+      <!-- Save Button -->
+      <button class="save-button" onclick="saveDetails()">Save</button>
+    </div>
+
+    <!-- Checkout Section -->
+    <div class="checkout-section" id="checkoutSection" style="display:none;">
+      <button class="back-button" onclick="goBack()"><i class="fas fa-arrow-left"></i></button> <!-- Back Button -->
+
+      <!-- Custom Checkout Button -->
+      <button class= "custom-checkout-button">Make Custom Checkout</button>
+
+      <!-- Checkout Information Header -->
+      <h2>Checkout Information</h2>
+
+      <!-- New Checkout Fields -->
+      <div class= "form-field">
+          <label for= "checkoutName">Name:</label>
+          <input type= "text" id= "checkoutName" placeholder= "Enter your name">
+      </div>
+
+      <div class= "form-field">
+          <label for= "mobileNumber">Mobile Number:</label>
+          <input type= "tel" id= "mobileNumber" placeholder= "Enter your mobile number">
+      </div>
+
+      <div class= "form-field">
+          <label for= "address">Address:</label>
+          <input type= "text" id= "address" placeholder= "Enter your address">
+      </div>
+
+      <div class= "form-field">
+          <label for= "landmark">Landmark:</label>
+          <input type='text' id='landmark' placeholder='Enter a landmark (optional)'>
+      </div>
+
+      <!-- City Field -->
+      <div class= "form-field">
+          <label for= "city">City:</label>
+          <input type= "text" id= "city" placeholder= "Enter your city">
+      </div>
+
+      <!-- State Field -->
+      <div class= "form-field">
+          <label for= "state">State:</label>
+          <input type= "text" id= "state" placeholder= "Enter your state">
+      </div>
+
+      <!-- Pincode Field -->
+      <div class= "form-field">
+          <label for= "pincode">Pincode:</label>
+          <input type= "text" id= "pincode" placeholder= "Enter your pincode">
+      </div>
+
+      <!-- Save Button for Checkout Section -->
+      <button class= "save-button" onclick= "saveCheckoutDetails()">Save Checkout Details</button>
+    </div>
+
+    <!-- Domain Management Section -->
+    <div class="domain-management-section" id="domainManagementSection">
+        <button class="back-button" onclick="goBack()"><i class="fas fa-arrow-left"></i></button> <!-- Back Button -->
+
+        <!-- Domain Management Options -->
+        <h2>Domain Management</h2>
+        
+        <!-- Container for Domain Options -->
+        <div class='domain-options-container'>
+            <!-- Buy Domain Option -->
+            <div class='domain-option' onclick='buyDomain()'>Buy Domain</div>
+
+            <!-- Add Existing Domain Option -->
+            <div class='domain-option' onclick='addExistingDomain()'>Add Existing Domain</div>
+        </div>
+    </div>
+
+    <!-- JavaScript Functions -->
+    <script>
+const countries = [
+    "United States", 
+    "Canada", 
+    "United Kingdom", 
+    "Australia", 
+    "Germany", 
+    "France", 
+    "India", 
+    "China", 
+    "Japan", 
+    "Brazil"
+];
+
+function showForm() {
+    document.querySelector('.blank-section').style.display = 'none'; // Hide main settings
+    document.getElementById('formSection').style.display = 'block'; // Show personal details form
+    document.getElementById('checkoutSection').style.display = 'none'; // Ensure checkout is hidden
+    document.getElementById('domainManagementSection').style.display = 'none'; // Ensure domain management is hidden
+}
+
+function showCheckout() {
+    document.querySelector('.blank-section').style.display = 'none'; // Hide main settings
+    document.getElementById('checkoutSection').style.display = 'block'; // Show checkout section
+    document.getElementById('formSection').style.display = 'none'; // Ensure personal details is hidden
+    document.getElementById('domainManagementSection').style.display = 'none'; // Ensure domain management is hidden
+}
+
+function showDomainManagement() {
+   document.querySelector('.blank-section').style.display = 'none'; // Hide main settings
+   document.getElementById('domainManagementSection').style.display = 'block'; // Show domain management section
+   document.getElementById('checkoutSection').style.display = 'none'; // Ensure checkout is hidden
+   document.getElementById('formSection').style.display = 'none'; // Ensure personal details is hidden
+}
+
+function goBack() {
+   document.getElementById('formSection').style.display = 'none'; // Hide personal details form
+   document.getElementById('checkoutSection').style.display = 'none'; // Hide checkout section
+   document.getElementById('domainManagementSection').style.display = 'none'; // Hide domain management section
+   document.querySelector('.blank-section').style.display = 'block'; // Show main settings again
+}
+
+function formatPhone() {
+   const phoneInput = document.getElementById('phone');
+   let value = phoneInput.value.replace(/\D/g, ''); // Remove non-numeric characters
+   if (value.length > 3) value = '(' + value.slice(0, 3) + ') ' + value.slice(3);
+   if (value.length > 9) value = value.slice(0, 9) + '-' + value.slice(9);
+   phoneInput.value = value;  
+}
+
+function showSuggestions(value) {
+   const suggestionsBox = document.getElementById('suggestions');
+   suggestionsBox.innerHTML = ''; // Clear previous suggestions
+   if (value.length === 0) { suggestionsBox.style.display = 'none'; return; } 
+
+   const filteredCountries = countries.filter(country => country.toLowerCase().includes(value.toLowerCase()));
+   filteredCountries.forEach(country => {
+       const suggestionItem = document.createElement('div');
+       suggestionItem.classList.add('suggestion-item');
+       suggestionItem.textContent = country;
+
+       suggestionItem.onclick = () => selectCountry(country); // Set click event to select country
+       suggestionsBox.appendChild(suggestionItem);
+   });
+   suggestionsBox.style.display = filteredCountries.length ? 'block' : 'none'; // Show or hide based on results
+}
+
+function selectCountry(country) {
+   document.getElementById('country').value = country; // Set input value to selected country
+   document.getElementById('selectedCountry').textContent = `Selected Country: ${country}`; // Show selected country below input
+
+   // Clear suggestions after selection
+   document.getElementById('suggestions').innerHTML = '';
+   document.getElementById('suggestions').style.display = 'none';
+}
+
+function saveDetails() {
+   const storeName = document.getElementById('storeName').value;  
+   const email = document.getElementById('email').value;
+
+   alert(`Details Saved:\nStore Name:${storeName}\nEmail:${email}`);
+   
+   goBack(); // Go back to main settings after saving
+}
+
+function saveCheckoutDetails() {  
+   const checkoutName = document.getElementById('checkoutName').value;
+   const mobileNumber = document.getElementById('mobileNumber').value;
+   const address = document.getElementById('address').value;
+   const landmark = document.getElementById('landmark').value;
+   const city = document.getElementById('city').value;
+   const state = document.getElementById('state').value;
+   const pincode = document.getElementById('pincode').value;
+
+   alert(`Checkout Details Saved:\nName:${checkoutName}\nMobile Number:${mobileNumber}\nAddress:${address}\nLandmark:${landmark}\nCity:${city}\nState:${state}\nPincode:${pincode}`);
+   
+   goBack(); // Go back to main settings after saving checkout details
+}
+
+function buyDomain() {
+   window.location.href = "https://www.godaddy.com"; // Redirect to GoDaddy's website
+}
+
+function addExistingDomain() {
+   alert("Redirecting to Add Existing Domain page...");
+   // Here you can implement the functionality to redirect or show a new form for adding an existing domain.
+}
+</script> 
+
+</body> 
+</html>  
